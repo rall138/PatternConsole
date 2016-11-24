@@ -1,0 +1,44 @@
+package <<PackageName>>
+
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import <<DAOPackage>>.<<DAOName>>;
+import <<ModelPackage>>.<<ModelName>>;
+
+@Service("<<ClassName>>_Service")
+public class <<ClassName>>_Service implements Serializable{
+
+	private <<DAOName>> <<DAONameTolower>>;
+	
+	public <<ClassName>>_Service(){}
+	
+	public <<DAOName>> get<<DAOName>>() {
+		return this.<<DAONameTolower>>;
+	}
+
+	@Autowired
+	public void set<<DAOName>>(<<DAOName>> <<DAONameTolower>>) {
+		this.<<DAONameTolower>> = <<DAONameTolower>>;
+	}
+	
+	public boolean insert(<<ClassName>> <<ModelName>>) {
+		return this.get<<DAOName>>().insert(<<ModelName>>);
+	}
+	
+	public boolean update(<<ModelName>> <<ModelName>>){
+		return this.get<<DAOName>>().update(<<ModelName>>);
+	}
+	
+	public boolean delete(<<ModelName>> <<ModelName>>){
+		return this.get<<DAOName>>().delete(<<ModelName>>);
+	}
+
+	public List<<<ModelName>>> getItemCollection() {
+		return this.<<DAOName>>.getItemCollection();
+	}	
+
+}

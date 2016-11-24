@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-antlr.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-bcel.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-bsf.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-log4j.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-oro.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-regexp.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-resolver.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-apache-xalan2.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-commons-logging.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-commons-net.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-jai.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-javamail.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-jdepend.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-jmf.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-jsch.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-junit.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-junit4.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-netrexx.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-swing.jar"/>
+	<classpathentry kind="lib" path="E:/EclipseWorkspace/Pattern01/resources/libraries/ant-testutil.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
