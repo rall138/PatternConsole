@@ -1,4 +1,4 @@
-package com.rldevel.DAO;
+package <<PackageName>>;
 
 import java.io.Serializable;
 import java.util.List;

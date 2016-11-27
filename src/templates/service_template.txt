@@ -1,4 +1,4 @@
-package <<PackageName>>
+package <<PackageName>>;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,39 +6,39 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import <<DAOPackage>>.<<DAOName>>;
-import <<ModelPackage>>.<<ModelName>>;
+import <<DAOPackageName>>.<<ClassName>>_DAO;
+import <<ModelPackageName>>.<<ClassName>>;
 
 @Service("<<ClassName>>_Service")
 public class <<ClassName>>_Service implements Serializable{
 
-	private <<DAOName>> <<DAONameTolower>>;
+	private <<ClassName>>_DAO <<ClassNameToLower>>_DAO;
 	
 	public <<ClassName>>_Service(){}
 	
-	public <<DAOName>> get<<DAOName>>() {
-		return this.<<DAONameTolower>>;
+	public <<ClassName>>_DAO get<<ClassName>>_DAO() {
+		return this.<<ClassNameToLower>>_DAO;
 	}
 
 	@Autowired
-	public void set<<DAOName>>(<<DAOName>> <<DAONameTolower>>) {
-		this.<<DAONameTolower>> = <<DAONameTolower>>;
+	public void set<<ClassName>>_DAO(<<ClassName>>_DAO <<ClassNameToLower>>_DAO) {
+		this.<<ClassNameToLower>>_DAO = <<ClassNameToLower>>_DAO;
 	}
 	
-	public boolean insert(<<ClassName>> <<ModelName>>) {
-		return this.get<<DAOName>>().insert(<<ModelName>>);
+	public boolean insert(<<ClassName>> <<ClassNameToLower>>) {
+		return this.get<<ClassNameToLower>>_DAO().insert(<<ClassNameToLower>>);
 	}
 	
-	public boolean update(<<ModelName>> <<ModelName>>){
-		return this.get<<DAOName>>().update(<<ModelName>>);
+	public boolean update(<<ClassNameToLower>> <<ClassNameToLower>>){
+		return this.get<<ClassNameToLower>>_DAO().update(<<ClassNameToLower>>);
 	}
 	
-	public boolean delete(<<ModelName>> <<ModelName>>){
-		return this.get<<DAOName>>().delete(<<ModelName>>);
+	public boolean delete(<<ClassNameToLower>> <<ClassNameToLower>>){
+		return this.get<<ClassNameToLower>>_DAO().delete(<<ClassNameToLower>>);
 	}
 
-	public List<<<ModelName>>> getItemCollection() {
-		return this.<<DAOName>>.getItemCollection();
+	public List<<<ClassName>>> getItemCollection() {
+		return this.<<ClassNameToLower>>_DAO.getItemCollection();
 	}	
 
 }
