@@ -1,0 +1,101 @@
+package <<PackageName>>;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import com.rldevel.Mode;
+
+import org.primefaces.event.SelectEvent;
+
+import <<ModelPackageName>>.<<ClassName>>;
+
+@ManagedBean(name="<<ClassName>>_MB")
+@SessionScoped
+public class <<ClassName>>_MB implements Serializable{
+
+	@ManagedProperty(value="#{<<ClassName>>_Service}")	
+	private <<ClassName>>_Service <<ClassNameToLower>>_Service;
+	
+	private Mode mode;
+	private List<<<ClassName>>> <<ClassNameToLower>>_collection = new List<>();
+	
+	public <<ClassName>>_MB(){}
+	
+	/* Getter and Setters [Begin] */
+
+	public List<<<ClassName>>> get<<ClassNameToLower>>_collection(){
+		return this.<<ClassNameToLower>>_collection;
+	}
+
+	public void set<<ClassNameToLower>>_collection(List<<<ClassName>>> <<ClassNameToLower>>_collection){
+		this.<<ClassNameToLower>>_collection = ;
+	}
+	
+	public Mode getMode(){
+		return this.mode;
+	}
+
+	public void setMode(Mode mode){
+		this.mode = mode;
+	}
+	
+	
+	/* Getter and Setters [End] */
+	
+	public void dialogConfirm(){
+		switch(this.mode){
+			case Mode.INSERT:
+				this.insert<<ClassName>>();
+				break;
+			case Mode.UPDATE:
+				this.update<<ClassName>>();
+				break;
+			case Mode.DELETE:
+				this.delete<<ClassName>>();
+				break;
+			}
+		}
+	}
+		
+	public boolean insert<<ClassName>>(){
+		boolean transaction = false;
+		if (this.<<ClassServiceToLower>>.insert(this.<<ClassNameToLower>>_selected)){
+			deployMessage("<<ClassName>> successfully created!", FacesMessage.SEVERITY_INFO);
+			transacion = true;
+		}else{
+			deployMessage("<<ClassName>> couldn't be created!", FacesMessage.SEVERITY_ERROR);
+		}
+		return transaction;
+	}
+	
+	public boolean update<<ClassName>>(){
+		boolean transaction = false;
+		if (this.<<ClassServiceToLower>>.update(this.<<ClassNameToLower>>_selected)){
+			deployMessage("<<ClassName>> successfully updated!", FacesMessage.SEVERITY_INFO);
+			transacion = true;
+		}else{
+			deployMessage("<<ClassName>> couldn't be updated!", FacesMessage.SEVERITY_ERROR);
+		}
+		return transaction;
+	}
+	
+	public boolean delete<<ClassName>>(){
+		boolean transaction = false;
+		if (this.<<ClassServiceToLower>>.deleted(this.<<ClassNameToLower>>_selected)){
+			deployMessage("<<ClassName>> successfully deleted!", FacesMessage.SEVERITY_INFO);
+			transacion = true;
+		}else{
+			deployMessage("<<ClassName>> couldn't be deleted!", FacesMessage.SEVERITY_ERROR);
+		}
+		return transaction;
+	}
+	
+}

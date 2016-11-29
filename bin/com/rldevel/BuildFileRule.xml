@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<project default="main" basedir=".">
+	
+	<echo message="Starting class patternConsole process..."/>
+
+	<target name="main"></target>
+	
+	<target name="fileRelative">
+		<echo append="false" file="${filename}" message="${message}"></echo>
+	</target>
+	
+	<target name="replacer">
+		<replaceregexp file="${filename}" match="${token}" replace="${message}"></replaceregexp>
+	</target>
+	
+	
+</project>
