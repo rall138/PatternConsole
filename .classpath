@@ -3,5 +3,35 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/localresources"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-antlr.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-bcel.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-bsf.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-log4j.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-oro.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-regexp.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-resolver.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-apache-xalan2.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-commons-logging.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-commons-net.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-jai.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-javamail.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-jdepend.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-jmf.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-jsch.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-junit.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-junit4.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-netrexx.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-swing.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant-testutil.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/ant.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/junit.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.compatibility_3.2.300.v20150423-0821.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.compatibility.registry.source_3.6.0.v20150318-1505.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.compatibility.source_3.2.300.v20150423-0821.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.source_3.11.1.v20150903-1804.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/org.eclipse.ui_3.107.0.v20150507-1945.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -16,9 +16,8 @@ import org.apache.tools.ant.BuildException;
 public class PatternConsole {
 
 	private static String[] m_args = null;
-	public static String currentDirectory = 
-			System.getProperty("os.name").compareToIgnoreCase("linux")==0 ? System.getenv("PWD") : "";
-	
+	public static String currentDirectory = getCurrentPath();
+				
 	public static void main(String[] args) {
 		m_args = args;
 		init();
@@ -28,17 +27,22 @@ public class PatternConsole {
 		if (m_args[0].compareToIgnoreCase("create")==0){
 			create();
 		}else if(m_args[0].compareToIgnoreCase("set-model")==0){
-			setPropertyOnFile("model_path", m_args[1]);
+			setPropertyOnFile("model_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("model_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-repository")==0){
-			setPropertyOnFile("repository_path", m_args[1]);
+			setPropertyOnFile("repository_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("repository_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-dao")==0){
-			setPropertyOnFile("dao_path", m_args[1]);
+			setPropertyOnFile("dao_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("dao_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-backingbean")==0){
-			setPropertyOnFile("backingbean_path", m_args[1]);
+			setPropertyOnFile("backingbean_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("backingbean_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-view")==0){
-			setPropertyOnFile("view_path", m_args[1]);
+			setPropertyOnFile("view_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("view_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else{
-			throw new IllegalArgumentException("Unknow command "+m_args[1]);
+			throw new IllegalArgumentException("Unknow command "+m_args[0]);
 		}
 	}
 	
@@ -59,7 +63,7 @@ public class PatternConsole {
 	
 	private static boolean createFull(){
 		boolean action = false;
-		CreateTask crt = new CreateTask(true, false);
+		CreateTask crt = new CreateTask(true, false, m_args[2]);
 		try{
 			crt.execute();
 			action = true;
@@ -72,7 +76,7 @@ public class PatternConsole {
 	
 	private static boolean createMinimmun(){
 		boolean action = false;
-		CreateTask crt = new CreateTask(false, true);
+		CreateTask crt = new CreateTask(false, true, m_args[2]);
 		try{
 			crt.execute();
 			action = true;
@@ -91,7 +95,7 @@ public class PatternConsole {
 			for(Pair pair : pares){
 				prop.setProperty(pair.getKey().toString(), pair.getValue().toString());
 			}
-			prop.setProperty(name, currentDirectory+"/"+value);
+			prop.setProperty(name, value);
 			prop.store(output, null);
 			output.close();
 		} catch (IOException e) {
@@ -116,7 +120,8 @@ public class PatternConsole {
 	}
 	
 	private static String getPropertiesPath(){
-		File file = new File(currentDirectory+"/Pattern01.properties");
+		File file = new File(currentDirectory+System.getProperty("file.separator")+"Pattern01.properties");
+		System.out.println(file.getAbsolutePath());
 		try {
 			if (!file.exists())
 				file.createNewFile();
@@ -124,6 +129,16 @@ public class PatternConsole {
 			e.printStackTrace();
 		}
 		return file.getAbsolutePath();
+	}
+	
+	private static String getCurrentPath(){
+		String currentPath = "";
+		if (System.getProperty("os.name").compareToIgnoreCase("linux")==0){
+			currentPath = System.getenv("PWD");
+		}else if(System.getProperty("os.name").toLowerCase().contains("windows")){
+			currentPath = System.getProperty("user.dir");
+		}
+		return currentPath;
 	}
 	
 	private class Pair{

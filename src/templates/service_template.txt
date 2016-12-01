@@ -30,15 +30,15 @@ public class <<ClassName>>_Service implements Serializable{
 	}
 	
 	public boolean update(<<ClassNameToLower>> <<ClassNameToLower>>){
-		return this.get<<ClassNameToLower>>_DAO().update(<<ClassNameToLower>>);
+		return this.get<<ClassName>>_DAO().update(<<ClassNameToLower>>);
 	}
 	
 	public boolean delete(<<ClassNameToLower>> <<ClassNameToLower>>){
-		return this.get<<ClassNameToLower>>_DAO().delete(<<ClassNameToLower>>);
+		return this.get<<ClassName>>_DAO().delete(<<ClassNameToLower>>);
 	}
 
 	public List<<<ClassName>>> getItemCollection() {
-		return this.<<ClassNameToLower>>_DAO.getItemCollection();
+		return this.<<ClassName>>_DAO.getItemCollection();
 	}	
 
 }

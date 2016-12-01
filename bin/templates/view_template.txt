@@ -15,21 +15,21 @@
 		<h:form>
 			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 
-	    	<p:dataTable id="<<ClassModelName>>_table" var="<<ClassModelNameToLower>>" 
-	    			value="#{<<ClassModelName>>_MB.<<ClassModelToLower>>_collection}">
+	    	<p:dataTable id="<<ClassName>>_table" var="<<ClassNameToLower>>" 
+	    			value="#{<<ClassName>>_MB.<<ClassModelToLower>>_collection}">
 	    		<<ClassModelPropertiesColumns>>
 	    	</p:dataTable>	
 	    	
-	    	<p:dialog header="Data form for <<ClassModelName>>" widgetVar="<<ClassModelNameToLower>>_modal" modal="true" height="100">
+	    	<p:dialog header="Data form for <<ClassName>>" widgetVar="<<ClassNameToLower>>_modal" modal="true" height="100">
 	
 	    			<p:panelGrid columns="2">
 	    				<<ClassModelPropertiesFormData>>
 	    			</p:panelGrid>
 	    			
 		            <p:panel>
-		                <p:commandButton id="<<ClassModelNameToLower>>_modal_action" 
-		                	value="Agregar" action="#{<<ClassModelName>>_MB.dialogConfirm}" 
-		                ajax="true" update="<<ClassModelName>>_table"/>
+		                <p:commandButton id="<<ClassNameToLower>>_modal_action" 
+		                	value="Agregar" action="#{<<ClassName>>_MB.dialogConfirm}" 
+		                ajax="true" update="<<ClassName>>_table"/>
 		            </p:panel>
 	    	</p:dialog>
    		</h:form>

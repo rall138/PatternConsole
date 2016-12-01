@@ -1,20 +1,16 @@
 package com.rldevel;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.Task;
 
 public class CreateTask extends Task{
@@ -29,19 +25,27 @@ public class CreateTask extends Task{
 	private String path_dao = null;
 	private String path_repository = null;
 	private String path_backingbean = null;
-	private String path_view;
+	private String path_view = null;
+	private String className = null;
+
+	private String import_model = null;
+	private String import_dao = null;
+	private String import_repository = null;
+	private String import_backingbean = null;
 	
-	private String className = "Test";
-	
-	public CreateTask(boolean isFull, boolean isMinimmun) {
+	public CreateTask(boolean isFull, boolean isMinimmun, String className) {
 		this.isFull = isFull;
 		this.isMinimmun = isMinimmun;
+		this.className = className;
 		getProperites();
 	}
 	
 	@Override
 	public void execute() throws BuildException {
 		try{
+			
+			classBasicCheck(className);
+			
 			if (isFull)
 				createFull();
 			else if (isMinimmun)
@@ -51,10 +55,18 @@ public class CreateTask extends Task{
 		}
 		super.execute();
 	}
+	
+	private void classBasicCheck(String className) throws FileNotFoundException{
+		File classInstance = new File(this.path_model+"/"+className+".java");
+		
+		if (!classInstance.exists() || !classInstance.getName().endsWith(".java"))
+			throw new FileNotFoundException("Clase "+className+" no encontrada");
+	}
 
 	private void createFull() throws IOException{
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter(this.path_dao+"/test"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(this.path_dao
+				+System.getProperty("file.separator")+this.className+"_DAO.java"));
 		BufferedReader reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/dao_template.txt")));
 		
@@ -67,7 +79,8 @@ public class CreateTask extends Task{
 		reader.close();
 		
 		
-		writer = new BufferedWriter(new FileWriter(this.path_repository+"/test"));
+		writer = new BufferedWriter(new FileWriter(this.path_repository
+				+System.getProperty("file.separator")+this.className+"_Service.java"));
 		reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/service_template.txt")));
 		line = "";
@@ -78,7 +91,8 @@ public class CreateTask extends Task{
 		writer.close();
 		reader.close();
 
-		writer = new BufferedWriter(new FileWriter(this.path_backingbean+"/test"));
+		writer = new BufferedWriter(new FileWriter(this.path_backingbean
+				+System.getProperty("file.separator")+this.className+"_MB.java"));
 		reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/backingbean_template.txt")));
 		line = "";
@@ -89,37 +103,21 @@ public class CreateTask extends Task{
 		writer.close();
 		reader.close();
 		
-	
-		createMinimmun();
-	
+
+		writer = new BufferedWriter(new FileWriter(this.path_view
+				+System.getProperty("file.separator")+this.className+"s.xhtml"));
+		reader = 
+				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/view_template.txt")));
+		line = "";
+		while((line = reader.readLine())!= null){
+			writer.write(tagReplacer(line, GENERATING.VIEW));
+			writer.newLine();
+		}
+		writer.close();
+		reader.close();
 	}
 
 	private void createMinimmun() throws IOException{
-//		File template  = new File(getResource("templates/backingbean_template.txt").getPath());
-//		bfr.getProject().setProperty("message", tagReplacer(template, GENERATING.BACKINGBEAN).toString());
-//		bfr.getProject().setProperty("filename", this.path_backingbean);
-//		bfr.executeTarget("fileRelative");
-	}
-	
-	
-	private CustomStringBuilder tagReplacer(File template, GENERATING generating) throws IOException{
-		CustomStringBuilder csb = new CustomStringBuilder();
-		BufferedReader reader = new BufferedReader(new FileReader(template));
-		String line = "";
-		while((line = reader.readLine())!= null){
-			line = line.replace("<<ClassName>>", this.className);
-			line = line.replace("<<ClassNameToLower>>", this.className.toLowerCase());
-			
-			//Package replacement depending on working class
-			line = packageReplacementTag(generating, line, "<<PackageName>>");
-			line = packageReplacementTag(GENERATING.DAO, line, "<<DAOPackageName>>");
-			line = packageReplacementTag(GENERATING.MODEL, line, "<<ModelPackageName>>");
-			line = packageReplacementTag(GENERATING.REPOSITORY, line, "<<ServicePackageName>>");
-			
-			csb.appendLn(line);
-		}
-		reader.close();
-		return csb;
 	}
 	
 	private String tagReplacer(String line, GENERATING generating){
@@ -139,19 +137,18 @@ public class CreateTask extends Task{
 	private String packageReplacementTag(GENERATING generating, String line, String tag){
 		switch (generating){
 			case MODEL:
-				line = line.replace(tag, this.path_model.replace(".",System.getProperty("file.separator")));
+				line = line.replace(tag, this.import_model);
 				break;
 			case DAO:
-				line = line.replace(tag, this.path_dao.replace(".",System.getProperty("file.separator")));
+				line = line.replace(tag, this.import_dao);
 				break;
 			case REPOSITORY:
-				line = line.replace(tag, this.path_repository.replace(".",System.getProperty("file.separator")));
+				line = line.replace(tag, this.import_repository);
 				break;
 			case BACKINGBEAN:
-				line = line.replace(tag, this.path_backingbean.replace(".",System.getProperty("file.separator")));
+				line = line.replace(tag, this.import_backingbean);
 				break;
 			case VIEW:
-				line = line.replace(tag, this.path_view.replace(".",System.getProperty("file.separator")));
 				break;
 		}
 		return line;
@@ -165,6 +162,12 @@ public class CreateTask extends Task{
 			this.path_repository = getSafeProperty("repository_path");
 			this.path_backingbean = getSafeProperty("backingbean_path");
 			this.path_view = getSafeProperty("view_path");
+			
+			this.import_model = getSafeProperty("model_import");
+			this.import_dao = getSafeProperty("dao_import");
+			this.import_repository = getSafeProperty("repository_import");
+			this.import_backingbean = getSafeProperty("backingbean_import");
+			
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}
