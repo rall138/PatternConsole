@@ -16,7 +16,7 @@
 			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 
 	    	<p:dataTable id="<<ClassName>>_table" var="<<ClassNameToLower>>" 
-	    			value="#{<<ClassName>>_MB.<<ClassModelToLower>>_collection}">
+	    			value="#{<<ClassName>>_MB.<<ClassName>>_collection}">
 	    		<<ClassModelPropertiesColumns>>
 	    	</p:dataTable>	
 	    	

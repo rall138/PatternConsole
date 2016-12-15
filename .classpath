@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.compatibility.source_3.2.300.v20150423-0821.jar"/>
 	<classpathentry kind="lib" path="resources/libraries/org.eclipse.core.runtime.source_3.11.1.v20150903-1804.jar"/>
 	<classpathentry kind="lib" path="resources/libraries/org.eclipse.ui_3.107.0.v20150507-1945.jar"/>
+	<classpathentry kind="lib" path="resources/libraries/P01GeneralHelper.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
