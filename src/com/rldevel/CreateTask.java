@@ -18,14 +18,13 @@ public class CreateTask extends Task{
 	private File propertyFile = new File(PatternConsole.currentDirectory+"/Pattern01.properties");
 	private boolean isFull = false;
 	private boolean isMinimmun = false;
-	private enum GENERATING {MODEL, DAO, REPOSITORY, BACKINGBEAN, VIEW};
+	private enum GENERATING {MODEL, DAO, REPOSITORY, BACKINGBEAN};
 
 	// Collected Paths
 	private String path_model = null;
 	private String path_dao = null;
 	private String path_repository = null;
 	private String path_backingbean = null;
-	private String path_view = null;
 	private String className = null;
 
 	private String import_model = null;
@@ -102,19 +101,7 @@ public class CreateTask extends Task{
 		}
 		writer.close();
 		reader.close();
-		
 
-		writer = new BufferedWriter(new FileWriter(this.path_view
-				+System.getProperty("file.separator")+this.className+"s.xhtml"));
-		reader = 
-				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/view_template.txt")));
-		line = "";
-		while((line = reader.readLine())!= null){
-			writer.write(tagReplacer(line, GENERATING.VIEW));
-			writer.newLine();
-		}
-		writer.close();
-		reader.close();
 	}
 
 	private void createMinimmun() throws IOException{
@@ -148,8 +135,6 @@ public class CreateTask extends Task{
 			case BACKINGBEAN:
 				line = line.replace(tag, this.import_backingbean);
 				break;
-			case VIEW:
-				break;
 		}
 		return line;
 	}
@@ -161,7 +146,6 @@ public class CreateTask extends Task{
 			this.path_dao = getSafeProperty("dao_path");
 			this.path_repository = getSafeProperty("repository_path");
 			this.path_backingbean = getSafeProperty("backingbean_path");
-			this.path_view = getSafeProperty("view_path");
 			
 			this.import_model = getSafeProperty("model_import");
 			this.import_dao = getSafeProperty("dao_import");

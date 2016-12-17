@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import com.rldevel.InitializeRequired;
 
 import org.apache.tools.ant.BuildException;
 
@@ -24,23 +25,36 @@ public class PatternConsole {
 	}
 	
 	private static void init(){
+		
+		try{
+			// The New of InitializeRequired already creates Mapper.xml and it's folder patternfolder
+			InitializeRequired.initilize();
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
+		String path_addition="src"+System.getProperty("file.separator")+"main"+System.getProperty("file.separator");
 		if (m_args[0].compareToIgnoreCase("create")==0){
 			create();
 		}else if(m_args[0].compareToIgnoreCase("set-model")==0){
-			setPropertyOnFile("model_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("model_path", currentDirectory+System.getProperty("file.separator")
+					+path_addition+m_args[1]);
 			setPropertyOnFile("model_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-repository")==0){
-			setPropertyOnFile("repository_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("repository_path", currentDirectory+System.getProperty("file.separator")
+			+path_addition+m_args[1]);
 			setPropertyOnFile("repository_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-dao")==0){
-			setPropertyOnFile("dao_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("dao_path", currentDirectory+System.getProperty("file.separator")
+			+path_addition+m_args[1]);
 			setPropertyOnFile("dao_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-backingbean")==0){
-			setPropertyOnFile("backingbean_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
+			setPropertyOnFile("backingbean_path", currentDirectory+System.getProperty("file.separator")
+			+path_addition+m_args[1]);
 			setPropertyOnFile("backingbean_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-view")==0){
-			setPropertyOnFile("view_path", currentDirectory+System.getProperty("file.separator")+m_args[1]);
-			setPropertyOnFile("view_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
+			setPropertyOnFile("view_path", currentDirectory+System.getProperty("file.separator")
+			+path_addition+m_args[1]);
 		}else{
 			throw new IllegalArgumentException("Unknow command "+m_args[0]);
 		}
@@ -121,7 +135,6 @@ public class PatternConsole {
 	
 	private static String getPropertiesPath(){
 		File file = new File(currentDirectory+System.getProperty("file.separator")+"Pattern01.properties");
-		System.out.println(file.getAbsolutePath());
 		try {
 			if (!file.exists())
 				file.createNewFile();
