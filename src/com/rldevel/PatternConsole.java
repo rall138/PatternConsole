@@ -10,9 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import com.rldevel.InitializeRequired;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.tools.ant.BuildException;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 public class PatternConsole {
 
@@ -33,28 +39,29 @@ public class PatternConsole {
 			ex.printStackTrace();
 		}
 		
+		String java_path_addition="src"+System.getProperty("file.separator")+"main"+System.getProperty("file.separator")
+		+"java"+System.getProperty("file.separator");
 		String path_addition="src"+System.getProperty("file.separator")+"main"+System.getProperty("file.separator");
+		
+		String property_path=currentDirectory+System.getProperty("file.separator")+java_path_addition+m_args[1];
+		String view_property_path=currentDirectory+System.getProperty("file.separator")+path_addition+m_args[1];
+		
 		if (m_args[0].compareToIgnoreCase("create")==0){
 			create();
 		}else if(m_args[0].compareToIgnoreCase("set-model")==0){
-			setPropertyOnFile("model_path", currentDirectory+System.getProperty("file.separator")
-					+path_addition+m_args[1]);
+			setPropertyOnFile("model_path", property_path);
 			setPropertyOnFile("model_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-repository")==0){
-			setPropertyOnFile("repository_path", currentDirectory+System.getProperty("file.separator")
-			+path_addition+m_args[1]);
+			setPropertyOnFile("repository_path", property_path);
 			setPropertyOnFile("repository_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-dao")==0){
-			setPropertyOnFile("dao_path", currentDirectory+System.getProperty("file.separator")
-			+path_addition+m_args[1]);
+			setPropertyOnFile("dao_path", property_path);
 			setPropertyOnFile("dao_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
-		}else if(m_args[0].compareToIgnoreCase("set-backingbean")==0){
-			setPropertyOnFile("backingbean_path", currentDirectory+System.getProperty("file.separator")
-			+path_addition+m_args[1]);
+		}else if(m_args[0].compareToIgnoreCase("set-mbean")==0){
+			setPropertyOnFile("backingbean_path", property_path);
 			setPropertyOnFile("backingbean_import", m_args[1].replace(System.getProperty("file.separator"), "."));
 		}else if(m_args[0].compareToIgnoreCase("set-view")==0){
-			setPropertyOnFile("view_path", currentDirectory+System.getProperty("file.separator")
-			+path_addition+m_args[1]);
+			setPropertyOnFile("view_path", view_property_path);
 		}else{
 			throw new IllegalArgumentException("Unknow command "+m_args[0]);
 		}
@@ -80,13 +87,74 @@ public class PatternConsole {
 		CreateTask crt = new CreateTask(true, false, m_args[2]);
 		try{
 			crt.execute();
+			updateMapper(crt);
 			action = true;
-		}catch(BuildException ex){
+		}catch(BuildException | XPathExpressionException ex){
 			ex.printStackTrace();
 			action = false;
 		}
 		return action;
 	}
+	
+	private static void updateMapper(CreateTask task) throws XPathExpressionException{
+		
+		try{
+		
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			String expression = "/Packages[1]";
+			String mapperPath = currentDirectory+System.getProperty("file.separator")+"patternfolder"+
+					System.getProperty("file.separator")+"Mapper.xml";
+			
+			InputSource source = new InputSource(new File(mapperPath).getAbsolutePath());
+			Node packagesNode = (Node) xpath.evaluate(expression, source, XPathConstants.NODE);
+			Node packageNode = null;
+			
+			boolean itemFound = false; Node childNode;
+			for(int index = 0; index < packagesNode.getChildNodes().getLength(); index ++){
+				if (packagesNode.hasChildNodes() ){
+					childNode = packagesNode.getChildNodes().item(index);
+					
+					if (childNode.hasAttributes() && childNode.getAttributes().getNamedItem("name")
+							.getNodeValue() == task.getImport_model()){
+						
+						itemFound = true;
+						packageNode = packagesNode.getChildNodes().item(index);
+						break;
+					}
+				}
+			}
+			
+			if (!itemFound){
+				System.out.println("Entrando en not itemfound");
+				packageNode = packagesNode.getOwnerDocument().createElement("Package");
+				Node name = packagesNode.getOwnerDocument().createAttribute("name");
+				name.setNodeValue(task.getImport_model());
+				packagesNode.appendChild(packageNode);
+				System.out.println(packageNode.getNodeType()+""+packageNode.getBaseURI()childNode.toString());
+			}
+			
+				
+			Node classNode = packageNode.getOwnerDocument().createElement("Class");
+			Node name = packageNode.getOwnerDocument().createAttribute("name");
+			name.setNodeValue(m_args[2]);
+			classNode.getAttributes().setNamedItem(name);
+			
+			packageNode.appendChild(classNode);
+			
+			
+			//BufferedWriter writer = new BufferedWriter(new FileWriter(new File(mapperPath)));
+			System.out.println(packagesNode.toString());
+	
+		}catch(NullPointerException ex){
+			ex.printStackTrace();
+		}
+		
+	}
+	
+//	private static recursiveWriter(CustomStringBuilder builder, Node node, int index){
+//		builder.appendLn(index, node.to);
+//		
+//	}
 	
 	private static boolean createMinimmun(){
 		boolean action = false;

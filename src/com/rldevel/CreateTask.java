@@ -59,7 +59,7 @@ public class CreateTask extends Task{
 		File classInstance = new File(this.path_model+"/"+className+".java");
 		
 		if (!classInstance.exists() || !classInstance.getName().endsWith(".java"))
-			throw new FileNotFoundException("Clase "+className+" no encontrada");
+			throw new FileNotFoundException("Missing class "+className);
 	}
 
 	private void createFull() throws IOException{
@@ -140,7 +140,7 @@ public class CreateTask extends Task{
 	}
 		
 	//Reading from property file 
-	public void getProperites(){
+	private void getProperites(){
 		try{
 			this.path_model = getSafeProperty("model_path");
 			this.path_dao = getSafeProperty("dao_path");
@@ -167,4 +167,8 @@ public class CreateTask extends Task{
 		return propertyValue;
 	}
 
+	public String getImport_model() {
+		return import_model;
+	}
+	
 }

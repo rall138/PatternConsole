@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import <<ModelPackageName>>.<<ClassName>>;
+
 @Repository
 @Transactional
 public class <<ClassName>>_DAO implements Serializable{
@@ -26,7 +28,7 @@ public class <<ClassName>>_DAO implements Serializable{
 
 	public <<ClassName>>_DAO(){}
 	
-	public boolean insert<<ClassName>>(<<ClassName>> <<ClassNameToLower>>){
+	public boolean insert(<<ClassName>> <<ClassNameToLower>>){
 		try{
 			this.getSessionFactory().getCurrentSession().update(<<ClassNameToLower>>);			
 		}catch(HibernateException ex){
@@ -35,7 +37,7 @@ public class <<ClassName>>_DAO implements Serializable{
 		return true;
 	}
 
-	public boolean update<<ClassName>>(<<ClassName>> <<ClassNameToLower>>){
+	public boolean update(<<ClassName>> <<ClassNameToLower>>){
 		try{
 			this.getSessionFactory().getCurrentSession().update(<<ClassNameToLower>>);			
 		}catch(HibernateException ex){
@@ -44,12 +46,16 @@ public class <<ClassName>>_DAO implements Serializable{
 		return true;
 	}
 
-	public boolean delete<<ClassName>>(<<ClassName>> <<ClassNameToLower>>){
+	public boolean delete(<<ClassName>> <<ClassNameToLower>>){
 		try{
 			this.getSessionFactory().getCurrentSession().delete(<<ClassNameToLower>>);			
 		}catch(HibernateException ex){
 			return false;
 		}
 		return true;
+	}
+	
+	public List<<<ClassName>>> getItemCollection(){
+		return this.getSessionFactory().getCurrentSession().createQuery("from <<ClassName>>").list();
 	}
 }

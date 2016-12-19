@@ -26,19 +26,19 @@ public class <<ClassName>>_Service implements Serializable{
 	}
 	
 	public boolean insert(<<ClassName>> <<ClassNameToLower>>) {
-		return this.get<<ClassNameToLower>>_DAO().insert(<<ClassNameToLower>>);
+		return this.get<<ClassName>>_DAO().insert(<<ClassNameToLower>>);
 	}
 	
-	public boolean update(<<ClassNameToLower>> <<ClassNameToLower>>){
+	public boolean update(<<ClassName>> <<ClassNameToLower>>){
 		return this.get<<ClassName>>_DAO().update(<<ClassNameToLower>>);
 	}
 	
-	public boolean delete(<<ClassNameToLower>> <<ClassNameToLower>>){
+	public boolean delete(<<ClassName>> <<ClassNameToLower>>){
 		return this.get<<ClassName>>_DAO().delete(<<ClassNameToLower>>);
 	}
 
 	public List<<<ClassName>>> getItemCollection() {
-		return this.<<ClassName>>_DAO.getItemCollection();
+		return this.get<<ClassName>>_DAO().getItemCollection();
 	}	
 
 }
