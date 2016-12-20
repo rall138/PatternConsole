@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class PatternConsole {
@@ -107,54 +108,66 @@ public class PatternConsole {
 			
 			InputSource source = new InputSource(new File(mapperPath).getAbsolutePath());
 			Node packagesNode = (Node) xpath.evaluate(expression, source, XPathConstants.NODE);
-			Node packageNode = null;
+			Node packageNode = 
+					returnElementFromChildNodes(task.getImport_model(), packagesNode.getChildNodes());
 			
-			boolean itemFound = false; Node childNode;
-			for(int index = 0; index < packagesNode.getChildNodes().getLength(); index ++){
-				if (packagesNode.hasChildNodes() ){
-					childNode = packagesNode.getChildNodes().item(index);
-					
-					if (childNode.hasAttributes() && childNode.getAttributes().getNamedItem("name")
-							.getNodeValue() == task.getImport_model()){
-						
-						itemFound = true;
-						packageNode = packagesNode.getChildNodes().item(index);
-						break;
-					}
-				}
-			}
-			
-			if (!itemFound){
-				System.out.println("Entrando en not itemfound");
+			Node name = null;
+			if (packageNode == null){
 				packageNode = packagesNode.getOwnerDocument().createElement("Package");
-				Node name = packagesNode.getOwnerDocument().createAttribute("name");
+				name = packagesNode.getOwnerDocument().createAttribute("name");
 				name.setNodeValue(task.getImport_model());
+				packageNode.getAttributes().setNamedItem(name);
 				packagesNode.appendChild(packageNode);
-				System.out.println(packageNode.getNodeType()+""+packageNode.getBaseURI()childNode.toString());
 			}
 			
-				
-			Node classNode = packageNode.getOwnerDocument().createElement("Class");
-			Node name = packageNode.getOwnerDocument().createAttribute("name");
-			name.setNodeValue(m_args[2]);
-			classNode.getAttributes().setNamedItem(name);
+			if (!isElementExistent(m_args[2], packageNode.getChildNodes())){
+				Node classNode = packageNode.getOwnerDocument().createElement("Class");
+				name = packageNode.getOwnerDocument().createAttribute("name");
+				name.setNodeValue(m_args[2]);
+				classNode.getAttributes().setNamedItem(name);
+				packageNode.appendChild(classNode);
+			}
 			
-			packageNode.appendChild(classNode);
-			
-			
-			//BufferedWriter writer = new BufferedWriter(new FileWriter(new File(mapperPath)));
-			System.out.println(packagesNode.toString());
-	
+			//Call to the mapper updater
+			MapperUpdater mpu = new MapperUpdater(currentDirectory, packagesNode.getOwnerDocument());
+			if (mpu.updateMapperXml())
+				System.out.println("== Generation Success ==");
+			else
+				System.err.println("== Error on Generation ==");
+
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
 		}
 		
 	}
 	
-//	private static recursiveWriter(CustomStringBuilder builder, Node node, int index){
-//		builder.appendLn(index, node.to);
-//		
-//	}
+	private static Node returnElementFromChildNodes(String name, NodeList list){
+		Node childNode = null, foundNode = null;
+		for(int index = 0; index < list.getLength(); index ++){
+			childNode = list.item(index);
+			if (childNode.hasAttributes() && 
+					childNode.getAttributes().getNamedItem("name")
+					.getNodeValue().trim().compareToIgnoreCase(name) == 0){
+				foundNode = childNode;
+				break;
+			}
+		}
+		return foundNode;
+	}
+	
+	private static boolean isElementExistent(String name, NodeList list){
+		boolean itemFound = false; Node childNode;
+		for(int index = 0; index < list.getLength(); index ++){
+			childNode = list.item(index);
+			if (childNode.hasAttributes() && childNode.getAttributes()
+					.getNamedItem("name")
+					.getNodeValue().trim().compareToIgnoreCase(name) == 0){
+				itemFound = true;
+				break;
+			}
+		}
+		return itemFound;
+	}
 	
 	private static boolean createMinimmun(){
 		boolean action = false;
