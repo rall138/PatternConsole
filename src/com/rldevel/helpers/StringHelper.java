@@ -1,4 +1,4 @@
-package com.rldevel;
+package com.rldevel.helpers;
 
 public class StringHelper {
 	

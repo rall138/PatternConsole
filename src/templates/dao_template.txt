@@ -58,4 +58,6 @@ public class <<ClassName>>_DAO implements Serializable{
 	public List<<<ClassName>>> getItemCollection(){
 		return this.getSessionFactory().getCurrentSession().createQuery("from <<ClassName>>").list();
 	}
+	
+	<<DAOGenerator>>
 }

@@ -1,0 +1,28 @@
+/*** Documentación de uso ***/
+
+CRUD de entidades
+
+Pre-requisitos:
+	- Debe de existir en el modelo la clase que representa la tabla en la base de datos.
+	- Deben de estar especificados en el documento [Pattern01.properties] las rutas de cada paquete ejemplo:
+		-- backingbean_import=com.rldevel.ManagedBeans
+		-- model_import=com.rldevel.Entities
+		-- view_path=E\:\\STSWorkspace\\monitor\\src\\main\\webapp
+		-- model_path=E\:\\STSWorkspace\\monitor\\src\\main\\java\\com\\rldevel\\Entities
+		-- dao_path=E\:\\STSWorkspace\\monitor\\src\\main\\java\\com\\rldevel\\DAO
+		-- repository_path=E\:\\STSWorkspace\\monitor\\src\\main\\java\\com\\rldevel\\Services
+		-- dao_import=com.rldevel.DAO
+		-- backingbean_path=E\:\\STSWorkspace\\monitor\\src\\main\\java\\com\\rldevel\\ManagedBeans
+		-- repository_import=com.rldevel.Services
+	
+	/* Esto se logra con los siguientes comandos:
+		-- set-model [path]
+		-- set-dao [path]
+		-- set-mbean [path]
+		-- set-view [path] 
+		(Tener en cuenta que se debe estar posicionado sobre el directorio
+		raíz de la aplicación.) */
+		
+Comandos de creación
+
+	create -[f|m] nombre_clase

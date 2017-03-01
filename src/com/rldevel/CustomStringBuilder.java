@@ -1,5 +1,7 @@
 package com.rldevel;
 
+import com.rldevel.helpers.StringHelper;
+
 public class CustomStringBuilder {
 	
 	private StringBuilder sb = new StringBuilder();

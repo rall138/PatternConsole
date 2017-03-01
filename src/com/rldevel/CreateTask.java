@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+
+import com.rldevel.helpers.ClassRelationMaker;
+import com.rldevel.helpers.PropertyHelper;
 
 public class CreateTask extends Task{
 
@@ -46,7 +47,11 @@ public class CreateTask extends Task{
 			classBasicCheck(className);
 			
 			if (isFull)
+				try{
 				createFull();
+				}catch(ClassNotFoundException | IOException e){
+					e.printStackTrace();
+				}
 			else if (isMinimmun)
 				createMinimmun();
 		}catch(IOException e){
@@ -62,13 +67,15 @@ public class CreateTask extends Task{
 			throw new FileNotFoundException("Missing class "+className);
 	}
 
-	private void createFull() throws IOException{
+	private void createFull() throws IOException, FileNotFoundException, ClassNotFoundException{
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(this.path_dao
 				+System.getProperty("file.separator")+this.className+"_DAO.java"));
+		
 		BufferedReader reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/dao_template.txt")));
 		
+	
 		String line = "";
 		while((line = reader.readLine())!= null){
 			writer.write(tagReplacer(line, GENERATING.DAO));
@@ -76,8 +83,7 @@ public class CreateTask extends Task{
 		}
 		writer.close();
 		reader.close();
-		
-		
+	
 		writer = new BufferedWriter(new FileWriter(this.path_repository
 				+System.getProperty("file.separator")+this.className+"_Service.java"));
 		reader = 
@@ -107,9 +113,12 @@ public class CreateTask extends Task{
 	private void createMinimmun() throws IOException{
 	}
 	
-	private String tagReplacer(String line, GENERATING generating){
+	private String tagReplacer(String line, GENERATING generating) throws ClassNotFoundException, IOException{
 		line = line.replace("<<ClassName>>", this.className);
 		line = line.replace("<<ClassNameToLower>>", this.className.toLowerCase());
+		
+		if (generating == GENERATING.DAO)
+			line = line.replace("<<DAOGenerator>>", ClassRelationMaker.relationDAO(this.className, this.propertyFile));
 		
 		//Package replacement depending on working class
 		line = packageReplacementTag(generating, line, "<<PackageName>>");
@@ -120,7 +129,6 @@ public class CreateTask extends Task{
 		return line;
 	}
 	
-
 	private String packageReplacementTag(GENERATING generating, String line, String tag){
 		switch (generating){
 			case MODEL:
@@ -142,30 +150,21 @@ public class CreateTask extends Task{
 	//Reading from property file 
 	private void getProperites(){
 		try{
-			this.path_model = getSafeProperty("model_path");
-			this.path_dao = getSafeProperty("dao_path");
-			this.path_repository = getSafeProperty("repository_path");
-			this.path_backingbean = getSafeProperty("backingbean_path");
+			this.path_model = PropertyHelper.getSafeProperty("model_path", this.propertyFile);
+			this.path_dao = PropertyHelper.getSafeProperty("dao_path", this.propertyFile);
+			this.path_repository = PropertyHelper.getSafeProperty("repository_path", this.propertyFile);
+			this.path_backingbean = PropertyHelper.getSafeProperty("backingbean_path", this.propertyFile);
 			
-			this.import_model = getSafeProperty("model_import");
-			this.import_dao = getSafeProperty("dao_import");
-			this.import_repository = getSafeProperty("repository_import");
-			this.import_backingbean = getSafeProperty("backingbean_import");
+			this.import_model = PropertyHelper.getSafeProperty("model_import", this.propertyFile);
+			this.import_dao = PropertyHelper.getSafeProperty("dao_import", this.propertyFile);
+			this.import_repository = PropertyHelper.getSafeProperty("repository_import", this.propertyFile);
+			this.import_backingbean = PropertyHelper.getSafeProperty("backingbean_import", this.propertyFile);
 			
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}
 	}
 	
-	private String getSafeProperty(String name) throws FileNotFoundException, IOException{
-		String propertyValue = "";
-		if (propertyFile != null && propertyFile.exists()){
-			Properties prop = new Properties();
-			prop.load(new FileReader(propertyFile));
-			propertyValue =  prop.getProperty(name) != null ? prop.getProperty(name): "";
-		}		
-		return propertyValue;
-	}
 
 	public String getImport_model() {
 		return import_model;
