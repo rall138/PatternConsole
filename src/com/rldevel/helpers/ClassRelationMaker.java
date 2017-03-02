@@ -9,44 +9,86 @@ import java.net.URLClassLoader;
 import java.util.Collection;
 
 import com.rldevel.CustomStringBuilder;
+import com.rldevel.Generating;
 
 public class ClassRelationMaker {
 
-	public static String relationDAO(String className, File propertyFile) throws ClassNotFoundException, FileNotFoundException, IOException{
+	private File propertyFile;
+	private String className;
+	private ClassLoader loader;
+	private static final String flsep = System.getProperty("file.separator");
+	private String import_path;
+	private String model_target_path;
+	private Generating generating;
+
+	public ClassRelationMaker(String className, File propertyFile, Generating generating){
+		this.propertyFile = propertyFile;
+		this.className = className;
+		this.generating = generating;
+		try{
+			this.import_path = PropertyHelper.getSafeProperty("model_import", propertyFile);
+			this.model_target_path = PropertyHelper.getSafeProperty("model_target_path", propertyFile);
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	public String generateCode() throws FileNotFoundException, IOException, ClassNotFoundException 
+	{
+		String code = "";
+		switch(generating){
+			case DAO:
+				code = generateDAOCode();
+				break;
+			case REPOSITORY:
+				
+				break;
+				
+			case BACKINGBEAN:
+				
+				break;
+		default:
+			break;
+		}
+		return code;
+	}
+	
+	public String generateDAOCode() throws FileNotFoundException, IOException, ClassNotFoundException 
+			{
 
 		CustomStringBuilder dao_lines = new CustomStringBuilder();
-		String model_import = PropertyHelper.getSafeProperty("model_import", propertyFile);
-		String model_path = PropertyHelper.getSafeProperty("model_path", propertyFile);
+		import_path = PropertyHelper.getSafeProperty("model_import", propertyFile);
+		model_target_path = PropertyHelper.getSafeProperty("model_target_path", propertyFile);
 		
-//		String auxiliar_path = model_path
-//				.replace(model_import.replace(".", System.getProperty("file.separator")), "");
+		//Fix for target path
+		model_target_path = 
+				model_target_path.replace(import_path.replace(".", flsep), "");
+		
+		File loaded_file = new File(model_target_path+flsep);
 
-		String auxiliar_path = model_path;
-		auxiliar_path = auxiliar_path.replace("src", "target");
-		auxiliar_path = auxiliar_path.replace("java", "classes");
-		
-		File loaded_file = new File(auxiliar_path);
-		
+		if (loaded_file.exists()){
 			URL[] urls = new URL[]{loaded_file.toURI().toURL()};
-			ClassLoader loader = new URLClassLoader(urls);
+			loader = new URLClassLoader(urls);
 		
-			Class<?> classInstance = loader.loadClass(className);
+			Class<?> classInstance = loader.loadClass(import_path+"."+className);
 			Field[] fields = classInstance.getDeclaredFields();
-			System.out.println(fields.length);
 			if (fields.length > 0){
 				for (int i = 0; i < fields.length; i++){
-					System.out.println(fields[i].getType());
 					if (Collection.class.isAssignableFrom(fields[i].getType())){
-						System.out.println("Assignable "+fields[i].getName());
-						dao_lines.appendLn(1,"public boolean checkIfExists_"+fields[i].getName()+"(){");
-						dao_lines.appendLn(2,"return "+fields[i].getName()+".isEmpty();");
-						dao_lines.appendLn(1,"};");
+						
+						String name_fix = fields[i].getName().substring(0, 1).toUpperCase();
+						name_fix += fields[i].getName().substring(1);
+						
+						dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix);
+						dao_lines.append("("+className+" "+className.toLowerCase()+"){");
+						dao_lines.appendLn(2,"return "+className.toLowerCase()+".get"+name_fix+".isEmpty();");
+						dao_lines.appendLn(1,"}");
 						dao_lines.clrlf();
 					}
 				}
 			}
+		}
 		return dao_lines.toString();
-		
 	}
 	
 }

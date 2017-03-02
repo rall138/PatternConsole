@@ -39,6 +39,7 @@ public class <<ClassName>>_Service implements Serializable{
 
 	public List<<<ClassName>>> getItemCollection() {
 		return this.get<<ClassName>>_DAO().getItemCollection();
-	}	
-
+	}
+	
+	<<ServiceGenerator>>
 }

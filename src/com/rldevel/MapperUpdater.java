@@ -14,11 +14,11 @@ import org.w3c.dom.Document;
 public class MapperUpdater {
 	
 	private String mapperPath; 
-	private static final String sep = System.getProperty("file.separator");
+	private static final String flsep = System.getProperty("file.separator");
 	private Document xmlDocument;
 	
 	public MapperUpdater(String currentDirectory, Document xmlDocument){
-		this.mapperPath = currentDirectory+sep+"patternfolder"+sep+"Mapper.xml";
+		this.mapperPath = currentDirectory+flsep+"patternfolder"+flsep+"mapper.xml";
 		this.xmlDocument = xmlDocument;
 	}
 	

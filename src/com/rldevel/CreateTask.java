@@ -16,11 +16,12 @@ import com.rldevel.helpers.PropertyHelper;
 
 public class CreateTask extends Task{
 
+	private static final String flsep = System.getProperty("file.separator");
+	
 	private File propertyFile = new File(PatternConsole.currentDirectory+"/Pattern01.properties");
 	private boolean isFull = false;
 	private boolean isMinimmun = false;
-	private enum GENERATING {MODEL, DAO, REPOSITORY, BACKINGBEAN};
-
+	
 	// Collected Paths
 	private String path_model = null;
 	private String path_dao = null;
@@ -61,7 +62,7 @@ public class CreateTask extends Task{
 	}
 	
 	private void classBasicCheck(String className) throws FileNotFoundException{
-		File classInstance = new File(this.path_model+"/"+className+".java");
+		File classInstance = new File(this.path_model+flsep+className+".java");
 		
 		if (!classInstance.exists() || !classInstance.getName().endsWith(".java"))
 			throw new FileNotFoundException("Missing class "+className);
@@ -70,7 +71,7 @@ public class CreateTask extends Task{
 	private void createFull() throws IOException, FileNotFoundException, ClassNotFoundException{
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(this.path_dao
-				+System.getProperty("file.separator")+this.className+"_DAO.java"));
+				+flsep+this.className+"_DAO.java"));
 		
 		BufferedReader reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/dao_template.txt")));
@@ -78,31 +79,31 @@ public class CreateTask extends Task{
 	
 		String line = "";
 		while((line = reader.readLine())!= null){
-			writer.write(tagReplacer(line, GENERATING.DAO));
+			writer.write(tagReplacer(line, Generating.DAO));
 			writer.newLine();
 		}
 		writer.close();
 		reader.close();
 	
 		writer = new BufferedWriter(new FileWriter(this.path_repository
-				+System.getProperty("file.separator")+this.className+"_Service.java"));
+				+flsep+this.className+"_Service.java"));
 		reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/service_template.txt")));
 		line = "";
 		while((line = reader.readLine())!= null){
-			writer.write(tagReplacer(line, GENERATING.REPOSITORY));
+			writer.write(tagReplacer(line, Generating.REPOSITORY));
 			writer.newLine();
 		}
 		writer.close();
 		reader.close();
 
 		writer = new BufferedWriter(new FileWriter(this.path_backingbean
-				+System.getProperty("file.separator")+this.className+"_MB.java"));
+				+flsep+this.className+"_MB.java"));
 		reader = 
 				new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/templates/backingbean_template.txt")));
 		line = "";
 		while((line = reader.readLine())!= null){
-			writer.write(tagReplacer(line, GENERATING.BACKINGBEAN));
+			writer.write(tagReplacer(line, Generating.BACKINGBEAN));
 			writer.newLine();
 		}
 		writer.close();
@@ -113,24 +114,30 @@ public class CreateTask extends Task{
 	private void createMinimmun() throws IOException{
 	}
 	
-	private String tagReplacer(String line, GENERATING generating) throws ClassNotFoundException, IOException{
+	private String tagReplacer(String line, Generating generating) throws ClassNotFoundException, IOException{
+		
 		line = line.replace("<<ClassName>>", this.className);
 		line = line.replace("<<ClassNameToLower>>", this.className.toLowerCase());
 		
-		if (generating == GENERATING.DAO)
-			line = line.replace("<<DAOGenerator>>", ClassRelationMaker.relationDAO(this.className, this.propertyFile));
+		if (generating == Generating.DAO){
+			ClassRelationMaker relationMaker = 
+					new ClassRelationMaker(this.className, propertyFile, generating);
+
+			line = line.replace("<<DAOGenerator>>", relationMaker.generateCode());
+
+		}
 		
 		//Package replacement depending on working class
 		line = packageReplacementTag(generating, line, "<<PackageName>>");
-		line = packageReplacementTag(GENERATING.DAO, line, "<<DAOPackageName>>");
-		line = packageReplacementTag(GENERATING.MODEL, line, "<<ModelPackageName>>");
-		line = packageReplacementTag(GENERATING.REPOSITORY, line, "<<ServicePackageName>>");
+		line = packageReplacementTag(Generating.DAO, line, "<<DAOPackageName>>");
+		line = packageReplacementTag(Generating.MODEL, line, "<<ModelPackageName>>");
+		line = packageReplacementTag(Generating.REPOSITORY, line, "<<ServicePackageName>>");
 		
 		return line;
 	}
 	
-	private String packageReplacementTag(GENERATING generating, String line, String tag){
-		switch (generating){
+	private String packageReplacementTag(Generating Generating, String line, String tag){
+		switch (Generating){
 			case MODEL:
 				line = line.replace(tag, this.import_model);
 				break;

@@ -24,6 +24,7 @@ import org.xml.sax.InputSource;
 public class PatternConsole {
 
 	private static String[] m_args = null;
+	private static final String flsep = System.getProperty("file.separator");
 	public static String currentDirectory = getCurrentPath();
 				
 	public static void main(String[] args) {
@@ -40,27 +41,30 @@ public class PatternConsole {
 			ex.printStackTrace();
 		}
 		
-		String java_path_addition="src"+System.getProperty("file.separator")+"main"+System.getProperty("file.separator")
-		+"java"+System.getProperty("file.separator");
-		String path_addition="src"+System.getProperty("file.separator")+"main"+System.getProperty("file.separator");
+		String java_path_addition="src"+flsep+"main"+flsep+"java"+flsep;
+		String path_addition="src"+flsep+"main"+flsep;
 		
-		String property_path=currentDirectory+System.getProperty("file.separator")+java_path_addition+m_args[1];
-		String view_property_path=currentDirectory+System.getProperty("file.separator")+path_addition+m_args[1];
+		String property_path=currentDirectory+flsep+java_path_addition+m_args[1];
+		String view_property_path=currentDirectory+flsep+path_addition+m_args[1];
 		
 		if (m_args[0].compareToIgnoreCase("create")==0){
 			create();
 		}else if(m_args[0].compareToIgnoreCase("set-model")==0){
 			setPropertyOnFile("model_path", property_path);
-			setPropertyOnFile("model_import", m_args[1].replace(System.getProperty("file.separator"), "."));
+			setPropertyOnFile("model_import", m_args[1].replace(flsep, "."));
+			property_path=property_path
+					.replace("src"+flsep+"main"+flsep+"java"+flsep, 
+							"target"+flsep+"classes"+flsep);
+			setPropertyOnFile("model_target_path", property_path);
 		}else if(m_args[0].compareToIgnoreCase("set-repository")==0){
 			setPropertyOnFile("repository_path", property_path);
-			setPropertyOnFile("repository_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
+			setPropertyOnFile("repository_import", m_args[1].replace(flsep, "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-dao")==0){
 			setPropertyOnFile("dao_path", property_path);
-			setPropertyOnFile("dao_import", m_args[1].replace(System.getProperty("file.separator"), "."));			
+			setPropertyOnFile("dao_import", m_args[1].replace(flsep, "."));			
 		}else if(m_args[0].compareToIgnoreCase("set-mbean")==0){
 			setPropertyOnFile("backingbean_path", property_path);
-			setPropertyOnFile("backingbean_import", m_args[1].replace(System.getProperty("file.separator"), "."));
+			setPropertyOnFile("backingbean_import", m_args[1].replace(flsep, "."));
 		}else if(m_args[0].compareToIgnoreCase("set-view")==0){
 			setPropertyOnFile("view_path", view_property_path);
 		}else{
@@ -103,8 +107,8 @@ public class PatternConsole {
 		
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			String expression = "/Packages[1]";
-			String mapperPath = currentDirectory+System.getProperty("file.separator")+"patternfolder"+
-					System.getProperty("file.separator")+"Mapper.xml";
+			String mapperPath = currentDirectory+flsep+"patternfolder"+
+					flsep+"Mapper.xml";
 			
 			InputSource source = new InputSource(new File(mapperPath).getAbsolutePath());
 			Node packagesNode = (Node) xpath.evaluate(expression, source, XPathConstants.NODE);
@@ -215,7 +219,7 @@ public class PatternConsole {
 	}
 	
 	private static String getPropertiesPath(){
-		File file = new File(currentDirectory+System.getProperty("file.separator")+"Pattern01.properties");
+		File file = new File(currentDirectory+flsep+"Pattern01.properties");
 		try {
 			if (!file.exists())
 				file.createNewFile();
