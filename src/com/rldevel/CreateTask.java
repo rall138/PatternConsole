@@ -124,7 +124,16 @@ public class CreateTask extends Task{
 					new ClassRelationMaker(this.className, propertyFile, generating);
 
 			line = line.replace("<<DAOGenerator>>", relationMaker.generateCode());
+		}else if (generating == Generating.REPOSITORY){
+			ClassRelationMaker relationMaker = 
+					new ClassRelationMaker(this.className, propertyFile, generating);
 
+			line = line.replace("<<ServiceGenerator>>", relationMaker.generateCode());
+		}else if (generating == Generating.BACKINGBEAN){
+			ClassRelationMaker relationMaker = 
+					new ClassRelationMaker(this.className, propertyFile, generating);
+
+			line = line.replace("<<BackingBeanGenerator>>", relationMaker.generateCode());
 		}
 		
 		//Package replacement depending on working class

@@ -33,32 +33,10 @@ public class ClassRelationMaker {
 		}
 	}
 	
-	public String generateCode() throws FileNotFoundException, IOException, ClassNotFoundException 
-	{
-		String code = "";
-		switch(generating){
-			case DAO:
-				code = generateDAOCode();
-				break;
-			case REPOSITORY:
-				
-				break;
-				
-			case BACKINGBEAN:
-				
-				break;
-		default:
-			break;
-		}
-		return code;
-	}
-	
-	public String generateDAOCode() throws FileNotFoundException, IOException, ClassNotFoundException 
-			{
+	public String generateCode() 
+			throws FileNotFoundException, IOException, ClassNotFoundException {
 
 		CustomStringBuilder dao_lines = new CustomStringBuilder();
-		import_path = PropertyHelper.getSafeProperty("model_import", propertyFile);
-		model_target_path = PropertyHelper.getSafeProperty("model_target_path", propertyFile);
 		
 		//Fix for target path
 		model_target_path = 
@@ -79,11 +57,31 @@ public class ClassRelationMaker {
 						String name_fix = fields[i].getName().substring(0, 1).toUpperCase();
 						name_fix += fields[i].getName().substring(1);
 						
-						dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix);
-						dao_lines.append("("+className+" "+className.toLowerCase()+"){");
-						dao_lines.appendLn(2,"return "+className.toLowerCase()+".get"+name_fix+".isEmpty();");
-						dao_lines.appendLn(1,"}");
-						dao_lines.clrlf();
+						switch(generating){
+							case DAO:
+								dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix);
+								dao_lines.append("("+className+" "+className.toLowerCase()+"){");
+								dao_lines.appendLn(2,"return "+className.toLowerCase()+".get"+name_fix+".isEmpty();");
+								dao_lines.appendLn(1,"}");
+								dao_lines.clrlf();
+								break;
+							case REPOSITORY:
+								dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix+"("+className+" "+className.toLowerCase()+"){");
+								dao_lines.appendLn(2,"return this."+className.toLowerCase()+"_DAO.checkIfExists_");
+								dao_lines.append(name_fix+"("+className.toLowerCase()+");");
+								dao_lines.appendLn(1,"}");
+								dao_lines.clrlf();
+								break;
+							case BACKINGBEAN:
+								dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix+"(){");
+								dao_lines.appendLn(2,"return this."+className.toLowerCase()+"_Service.checkIfExists_");
+								dao_lines.append(name_fix+"("+className.toLowerCase()+"_Selected);");
+								dao_lines.appendLn(1,"}");
+								dao_lines.clrlf();
+								break;
+							default:
+								break;
+						}
 					}
 				}
 			}

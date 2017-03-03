@@ -26,7 +26,7 @@ public class <<ClassName>>_MB implements Serializable{
 	private <<ClassName>>_Service <<ClassNameToLower>>_Service;
 	
 	private Mode mode;
-	private <<ClassName>> <<ClassNameToLower>>_selected = null;
+	private <<ClassName>> <<ClassNameToLower>>_Selected = null;
 	
 	public <<ClassName>>_MB(){}
 	
@@ -62,7 +62,7 @@ public class <<ClassName>>_MB implements Serializable{
 	
 	public boolean insert<<ClassName>>(){
 		boolean transaction = false;
-		if (this.<<ClassNameToLower>>_Service.insert(this.<<ClassNameToLower>>_selected)){
+		if (this.<<ClassNameToLower>>_Service.insert(this.<<ClassNameToLower>>_Selected)){
 			deployMessage("<<ClassName>> successfully created!", FacesMessage.SEVERITY_INFO);
 			transaction = true;
 		}else{
@@ -73,7 +73,7 @@ public class <<ClassName>>_MB implements Serializable{
 	
 	public boolean update<<ClassName>>(){
 		boolean transaction = false;
-		if (this.<<ClassNameToLower>>_Service.update(this.<<ClassNameToLower>>_selected)){
+		if (this.<<ClassNameToLower>>_Service.update(this.<<ClassNameToLower>>_Selected)){
 			deployMessage("<<ClassName>> successfully updated!", FacesMessage.SEVERITY_INFO);
 			transaction = true;
 		}else{
@@ -84,7 +84,7 @@ public class <<ClassName>>_MB implements Serializable{
 	
 	public boolean delete<<ClassName>>(){
 		boolean transaction = false;
-		if (this.<<ClassNameToLower>>_Service.delete(this.<<ClassNameToLower>>_selected)){
+		if (this.<<ClassNameToLower>>_Service.delete(this.<<ClassNameToLower>>_Selected)){
 			deployMessage("<<ClassName>> successfully deleted!", FacesMessage.SEVERITY_INFO);
 			transaction = true;
 		}else{
@@ -92,6 +92,8 @@ public class <<ClassName>>_MB implements Serializable{
 		}
 		return transaction;
 	}
+	
+	<<BackingBeanGenerator>>
 	
 	private void deployMessage(String strMessage, Severity severity){
 		FacesContext context = FacesContext.getCurrentInstance();
