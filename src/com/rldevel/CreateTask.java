@@ -180,7 +180,6 @@ public class CreateTask extends Task{
 			ex.printStackTrace();
 		}
 	}
-	
 
 	public String getImport_model() {
 		return import_model;
