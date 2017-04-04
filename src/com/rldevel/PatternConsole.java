@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -115,7 +116,7 @@ public class PatternConsole {
 			Node packageNode = 
 					returnElementFromChildNodes(task.getImport_model(), packagesNode.getChildNodes());
 			
-			Node name = null;
+			Node name = null, uuid = null;
 			if (packageNode == null){
 				packageNode = packagesNode.getOwnerDocument().createElement("Package");
 				name = packagesNode.getOwnerDocument().createAttribute("name");
@@ -126,9 +127,12 @@ public class PatternConsole {
 			
 			if (!isElementExistent(m_args[2], packageNode.getChildNodes())){
 				Node classNode = packageNode.getOwnerDocument().createElement("Class");
+				uuid = packageNode.getOwnerDocument().createAttribute("uuid");
 				name = packageNode.getOwnerDocument().createAttribute("name");
+				uuid.setNodeValue(UUID.randomUUID().toString());
 				name.setNodeValue(m_args[2]);
 				classNode.getAttributes().setNamedItem(name);
+				classNode.getAttributes().setNamedItem(uuid);
 				packageNode.appendChild(classNode);
 			}
 			
