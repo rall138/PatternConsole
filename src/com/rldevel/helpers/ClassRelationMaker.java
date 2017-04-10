@@ -13,7 +13,6 @@ import com.rldevel.Generating;
 
 public class ClassRelationMaker {
 
-	private File propertyFile;
 	private String className;
 	private ClassLoader loader;
 	private static final String flsep = System.getProperty("file.separator");
@@ -22,7 +21,6 @@ public class ClassRelationMaker {
 	private Generating generating;
 
 	public ClassRelationMaker(String className, File propertyFile, Generating generating){
-		this.propertyFile = propertyFile;
 		this.className = className;
 		this.generating = generating;
 		try{
@@ -61,7 +59,7 @@ public class ClassRelationMaker {
 							case DAO:
 								dao_lines.appendLn(1,"public boolean checkIfExists_"+name_fix);
 								dao_lines.append("("+className+" "+className.toLowerCase()+"){");
-								dao_lines.appendLn(2,"return "+className.toLowerCase()+".get"+name_fix+".isEmpty();");
+								dao_lines.appendLn(2,"return "+className.toLowerCase()+".get"+name_fix+"().isEmpty();");
 								dao_lines.appendLn(1,"}");
 								dao_lines.clrlf();
 								break;
